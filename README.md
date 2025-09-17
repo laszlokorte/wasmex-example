@@ -38,7 +38,7 @@ $ mix test # alternatively run unit tests
 The `Wasmaex` module reads the `wasm` file, starts a Wasm Interpreter as a GenServer and passes the given name as
 string to the wasm module. This is handled by the `{:wasmex, "~> 0.13.0"}` Elixir package.
 
-## Prerequisits
+## Prerequisites
 
 The rust compiler target [`wasm32-wasip1`](https://doc.rust-lang.org/rustc/platform-support/wasm32-wasip1.html) must be installed:
 
