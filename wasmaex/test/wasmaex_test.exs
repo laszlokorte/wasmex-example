@@ -3,6 +3,6 @@ defmodule WasmaexTest do
   doctest Wasmaex
 
   test "greets the world" do
-    assert Wasmaex.hello() == :world
+    assert Wasmaex.hello("Ada") == 3
   end
 end

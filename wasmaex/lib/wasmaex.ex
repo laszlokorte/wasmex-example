@@ -8,16 +8,31 @@ defmodule Wasmaex do
 
   ## Examples
 
-      iex> Wasmaex.hello()
-      :world
+      iex> Wasmaex.hello("Josy")
+      4
 
   """
-  def hello do
+  def hello(name) when is_binary(name) do
     bytes =
-      File.read!("../wasmaru/target/wasm32-unknown-unknown/release/wasmaru.wasm")
+      File.read!("../wasmaru/target/wasm32-wasip2/debug/wasmaru.wasm")
 
-    # starts a GenServer running a Wasm instance
-    {:ok, pid} = Wasmex.start_link(%{bytes: bytes})
-    {:ok, [42]} == Wasmex.call_function(pid, "sum", [50, -8])
+    {:ok, pid} =
+      Wasmex.Components.start_link(%{
+        bytes: bytes,
+        imports: %{
+          "print" => {:fn, &Wasmaex.my_print/1}
+        }
+      })
+
+    {:ok, length} = pid |> GenServer.call({:call_function, "run", [name]})
+    IO.puts("Rust returned the length of your name: #{length}")
+    GenServer.stop(pid)
+
+    length
+  end
+
+  def my_print(str) do
+    IO.puts("Rust called the Elixir my_print function with str:")
+    dbg(str)
   end
 end
